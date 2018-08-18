@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import Divider from '@material-ui/core/Divider';
 import Drawer from "./Drawer"
 const styles = theme => ({
   root: {
@@ -46,11 +45,6 @@ class NavBar extends React.Component {
   render() {
     const { classes, lang, languageChanged, home } = this.props;
     const { open } = this.state
-    const sideList = (
-      <div className={classes.list}>
-        <Divider />
-      </div>
-    );
     return (
       <div className={classes.root} dir={lang === "en" ? "rtl" : "ltr"}>
         <AppBar position="static" style={{ backgroundColor: "#799830" }} >

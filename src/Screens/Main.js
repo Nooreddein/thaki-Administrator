@@ -6,6 +6,7 @@ import { Grid, Card, Button, Divider } from '@material-ui/core';
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from "react-router-dom"
+import Axios from '../../node_modules/axios';
 
 
 const styles = theme => ({
@@ -26,36 +27,51 @@ class Main extends Component {
         super(props)
 
         this.state = {
-
+            res: undefined
         }
+    }
+
+    componentDidMount() {
+        Axios.get('/api/v1/analytics/admins')
+            .then((res) => {
+                console.log(res);
+
+                this.setState({
+                    res: res.data
+                })
+            })
+            .catch((err) => {
+                console.log(err);
+
+            })
     }
 
     render() {
         const { lang, classes } = this.props
+        console.log(this.props);
+        
         return (
             <div>
                 <NavBar home />
 
                 <Grid container direction="column">
                     <Grid item>
-
                         <Grid container direction="row" justify="center">
                             <Grid item >
                                 <Card style={{ padding: 70, textAlign: 'center', margin: "30px" }}>
-                                <Link to="add-admin">
-                                    <Button variant="contained"
-                                        style={{ backgroundColor: '#799830', color: "white", cursor: 'pointer' }}
-                                        className={classes.button} onClick={this.submitLogin}>
-                                        {lang === "en" ? "Add Admin" : "اضافة مسؤول"}</Button></Link>
+                                    <Link to="add-admin">
+                                        <Button variant="contained"
+                                            style={{ backgroundColor: '#799830', color: "white", cursor: 'pointer' }}
+                                            className={classes.button} onClick={this.submitLogin}>
+                                            {lang === "en" ? "Add Admin" : "اضافة مسؤول"}</Button></Link>
                                     <p style={{ fontSize: "30px" }}>{lang === "en" ? "We Currently Have" : "لدينا حاليا"}</p>
-                                    <Card><p style={{ fontSize: "40px", color: "#799830" }}>{4}</p></Card>
+                                    <Card><p style={{ fontSize: "40px", color: "#799830" }}>{this.state.res}</p></Card>
                                     <p style={{ fontSize: "30px" }}>{lang === "en" ? "Administrators" : "مسؤول"}</p>
                                 </Card>
-
                             </Grid>
                             <Grid item >
                                 <Card style={{ padding: 70, textAlign: 'center', margin: "30px" }}>
-                                <Link to="/add-content"><Button variant="contained"
+                                    <Link to="/add-content"><Button variant="contained"
                                         style={{ backgroundColor: '#799830', color: "white", cursor: 'pointer' }}
                                         className={classes.button} >
                                         {lang === "en" ? "Add Content" : "اضافة ملف"}</Button></Link>
@@ -67,7 +83,7 @@ class Main extends Component {
                             </Grid>
                             <Grid item >
                                 <Card style={{ padding: 70, textAlign: 'center', margin: "30px" }}>
-                                <Link to="/add-content"><Button variant="contained"
+                                    <Link to="/add-content"><Button variant="contained"
                                         style={{ backgroundColor: '#799830', color: "white", cursor: 'pointer' }}
                                         className={classes.button} >
                                         {lang === "en" ? "Add Content" : "اضافة ملف"}</Button></Link>
@@ -92,9 +108,11 @@ class Main extends Component {
                                 <div style={{ marginTop: 250, height: "200px", textAlign: 'center' }}>
                                     <p style={{ color: "#799830", fontSize: 50 }}>
                                         {lang === "en" ? "Downloads Analytics" : "احصاىيات التحميل"}</p>
-                                    <PieChart data={[[lang === "en" ? "Successful Downloads" : "التحميلات الناجحة", 44],
-                                    [lang === "en" ? "Paused Downloads" : "التحميلات الموقفة", 23],
-                                    [lang === "en" ? "Failed Downloads" : "التحميلات الفاشلة", 12]]} />
+                                    <PieChart data={[
+                                        [lang === "en" ? "Successful Downloads" : "التحميلات الناجحة", 44],
+                                        [lang === "en" ? "Paused Downloads" : "التحميلات الموقفة", 23],
+                                        [lang === "en" ? "Failed Downloads" : "التحميلات الفاشلة", 12]
+                                    ]} />
                                 </div>
                             </Grid>
                             <Grid item xs>
@@ -111,9 +129,10 @@ class Main extends Component {
     }
 }
 
-const mapStateToProps = ({ langReducer }) => {
+const mapStateToProps = ({ langReducer, AdminReducer }) => {
     const { lang } = langReducer
-    return { lang }
+    const { data } = AdminReducer
+    return { lang, data }
 }
 
 

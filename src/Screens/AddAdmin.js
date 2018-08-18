@@ -4,6 +4,7 @@ import { Grid, Card, TextField, Button } from "@material-ui/core";
 import { connect } from 'react-redux'
 import NavBar from './NavBar'
 import { Link } from "react-router-dom"
+import Axios from "../../node_modules/axios";
 
 const styles = theme => ({
     button: {
@@ -28,7 +29,12 @@ class AddAdmin extends React.Component {
         }
 
     }
-
+    AddAdmin = () =>{
+        Axios.post("/api/v1/addAdmin",{
+            username:"noor1",
+            password:"alo"
+        })
+    }
 
 
     render() {
@@ -80,6 +86,7 @@ class AddAdmin extends React.Component {
                                 <Grid item >
                                     <Link to="/home">
                                         <Button variant="contained"
+                                        onClick={this.AddAdmin}
                                             style={{ backgroundColor: '#799830', color: "white", cursor: 'pointer' }} className={classes.button}>{lang === "en" ? "Add" : "اضافة"}</Button>
                                     </Link>
                                 </Grid>

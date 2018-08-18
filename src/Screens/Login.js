@@ -4,6 +4,8 @@ import { Grid, Card, TextField, Button } from "@material-ui/core";
 import { connect } from 'react-redux'
 import NavBar from './NavBar'
 import { Link } from "react-router-dom"
+import { isLogedIn } from '../actions/index'
+import Axios from "../../node_modules/axios";
 
 const styles = theme => ({
     button: {
@@ -46,7 +48,17 @@ class Login extends React.Component {
 
     submitLogin() {
         console.log("LOGIN");
-
+        Axios.post("/api/v1/login", {
+            username: "noor1",
+            password: 'alo'
+        })
+            .then((res) => {
+                console.log(res);
+                this.props.isLogedIn(res.data)
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     }
 
     render() {
@@ -70,32 +82,32 @@ class Login extends React.Component {
                         <Card style={{ padding: 30 }}>
                             <Grid container direction="column" alignItems="center">
                                 <Grid item >
-                                <div dir={lang === "en"?"ltr":"rtl"}> 
-                                    <TextField
-                                        label={lang === "en" ? "User Name" : "اسم المستخدم"}
-                                        placeholder={lang === "en" ? "User Name" : "اسم المستخدم"}
-                                        margin="normal"
-                                        className={classes.textField}
-                                        onChange={this.onChange}
-                                    />
+                                    <div dir={lang === "en" ? "ltr" : "rtl"}>
+                                        <TextField
+                                            label={lang === "en" ? "User Name" : "اسم المستخدم"}
+                                            placeholder={lang === "en" ? "User Name" : "اسم المستخدم"}
+                                            margin="normal"
+                                            className={classes.textField}
+                                            onChange={this.onChange}
+                                        />
                                     </div>
                                 </Grid>
                                 <Grid item >
-                                <div dir={lang === "en"?"ltr":"rtl"}> 
-                                    <TextField
-                                        id="password-input"
-                                        label={lang === "en" ? "Password" : "كلمة المرور"}
-                                        placeholder={lang === "en" ? "Password" : "كلمة المرور"}
-                                        type="password"
-                                        className={classes.textField}
-                                        autoComplete="current-password"
-                                        margin="normal"
-                                        onChange={this.onChangee}
-                                    />
+                                    <div dir={lang === "en" ? "ltr" : "rtl"}>
+                                        <TextField
+                                            id="password-input"
+                                            label={lang === "en" ? "Password" : "كلمة المرور"}
+                                            placeholder={lang === "en" ? "Password" : "كلمة المرور"}
+                                            type="password"
+                                            className={classes.textField}
+                                            autoComplete="current-password"
+                                            margin="normal"
+                                            onChange={this.onChangee}
+                                        />
                                     </div>
                                 </Grid>
                                 <Grid item >
-                                    <Link to="/home">
+                                    <Link to="home">
                                         <Button variant="contained"
                                             style={{ backgroundColor: '#799830', color: "white", cursor: 'pointer' }} className={classes.button} onClick={this.submitLogin}>{lang === "en" ? "Login" : "تسجيل الدخول"}</Button>
                                     </Link>
@@ -117,4 +129,4 @@ const mapStateToProps = ({ langReducer }) => {
 
 
 
-export default connect(mapStateToProps)(withStyles(styles)(Login))
+export default connect(mapStateToProps, { isLogedIn })(withStyles(styles)(Login))

@@ -12,6 +12,7 @@ class Drawer extends React.Component {
             <div>
                 <img
                     style={{ width: "100px", height: "100px" }}
+                    alt=""
                     src={require('../assets/image.png')} />
                     <Divider />
                 <p style={{ fontSize: "30px", color: "#799830", margin: "20px" }}>Thaki Admin</p>

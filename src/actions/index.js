@@ -7,3 +7,12 @@ export const languageChanged = (lang) =>{
         payload:lang
     }
 }
+
+
+
+export const isLogedIn = (data) => {
+    return {
+        type:"LOGGED_IN",
+        payload:data
+    }
+}
