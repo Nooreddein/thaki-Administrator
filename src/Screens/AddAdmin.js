@@ -25,14 +25,20 @@ class AddAdmin extends React.Component {
     constructor() {
         super()
         this.state = {
-
+            email: "",
+            password: ""
         }
 
     }
-    AddAdmin = () =>{
-        Axios.post("/api/v1/addAdmin",{
-            username:"noor1",
-            password:"alo"
+    AddAdmin = () => {
+        const { emial , password } = this.state
+        Axios.post("/api/v1/addAdmin", {
+            emial,
+            password
+        }).then((res)=>{
+            console.log(res.data);
+        }).catch(err=>{
+            console.log(err);
         })
     }
 
@@ -43,8 +49,8 @@ class AddAdmin extends React.Component {
         return (
             <div style={{ marginBottom: "325px" }} >
                 <NavBar />
-                <div style={{textAlign:"center"}}>
-                <p style={{fontSize:"80px",color:"#799830"}}>Add Administrator</p>
+                <div style={{ textAlign: "center" }}>
+                    <p style={{ fontSize: "80px", color: "#799830" }}>Add Administrator</p>
                 </div>
                 <Grid container justify="space-around" alignItems="center" direction="column">
                     <Grid item xs={6}>
@@ -61,32 +67,34 @@ class AddAdmin extends React.Component {
                         <Card style={{ padding: 30 }}>
                             <Grid container direction="column" alignItems="center">
                                 <Grid item >
-                                <div dir={lang === "en"?"ltr":"rtl"}> 
-                                    <TextField
-                                        label={lang === "en" ? "User Name" : "اسم المستخدم"}
-                                        placeholder={lang === "en" ? "User Name" : "اسم المستخدم"}
-                                        margin="normal"
-                                        className={classes.textField}
-                                    />
+                                    <div dir={lang === "en" ? "ltr" : "rtl"}>
+                                        <TextField
+                                            label={lang === "en" ? "User Name" : "اسم المستخدم"}
+                                            placeholder={lang === "en" ? "User Name" : "اسم المستخدم"}
+                                            margin="normal"
+                                            onChange={(e) => this.setState({ email: e.target.value })}
+                                            className={classes.textField}
+                                        />
                                     </div>
                                 </Grid>
                                 <Grid item >
-                                <div dir={lang === "en"?"ltr":"rtl"}> 
-                                    <TextField
-                                        id="password-input"
-                                        label={lang === "en" ? "Password" : "كلمة المرور"}
-                                        placeholder={lang === "en" ? "Password" : "كلمة المرور"}
-                                        type="password"
-                                        className={classes.textField}
-                                        autoComplete="current-password"
-                                        margin="normal"
-                                    />
+                                    <div dir={lang === "en" ? "ltr" : "rtl"}>
+                                        <TextField
+                                            id="password-input"
+                                            label={lang === "en" ? "Password" : "كلمة المرور"}
+                                            placeholder={lang === "en" ? "Password" : "كلمة المرور"}
+                                            type="password"
+                                            onChange={(e) => this.setState({ password: e.target.value })}
+                                            className={classes.textField}
+                                            autoComplete="current-password"
+                                            margin="normal"
+                                        />
                                     </div>
                                 </Grid>
                                 <Grid item >
                                     <Link to="/home">
                                         <Button variant="contained"
-                                        onClick={this.AddAdmin}
+                                            onClick={this.AddAdmin}
                                             style={{ backgroundColor: '#799830', color: "white", cursor: 'pointer' }} className={classes.button}>{lang === "en" ? "Add" : "اضافة"}</Button>
                                     </Link>
                                 </Grid>

@@ -27,7 +27,8 @@ class Main extends Component {
         super(props)
 
         this.state = {
-            res: undefined
+            res: undefined,
+            content: undefined
         }
     }
 
@@ -44,16 +45,19 @@ class Main extends Component {
                 console.log(err);
 
             })
+
+        Axios.get('/api/v1/get/all/objects').then((res) => {
+            this.setState({content:res.data})
+        })
     }
 
     render() {
         const { lang, classes } = this.props
-        console.log(this.props);
-        
+        console.log(this.state);
+
         return (
             <div>
                 <NavBar home />
-
                 <Grid container direction="column">
                     <Grid item>
                         <Grid container direction="row" justify="center">
@@ -73,7 +77,7 @@ class Main extends Component {
                                 <Card style={{ padding: 70, textAlign: 'center', margin: "30px" }}>
                                     <Link to="/add-content"><Button variant="contained"
                                         style={{ backgroundColor: '#799830', color: "white", cursor: 'pointer' }}
-                                        className={classes.button} >
+                                        className={classes.button}>
                                         {lang === "en" ? "Add Content" : "اضافة ملف"}</Button></Link>
                                     <p style={{ fontSize: "30px" }}>{lang === "en" ? "We Currently Have" : "لدينا حاليا"}</p>
                                     <Card><p style={{ fontSize: "40px", color: "#799830" }}>{78}</p></Card>
@@ -88,8 +92,8 @@ class Main extends Component {
                                         className={classes.button} >
                                         {lang === "en" ? "Add Content" : "اضافة ملف"}</Button></Link>
                                     <p style={{ fontSize: "30px" }}>{lang === "en" ? "We Currently Have" : "لدينا حاليا"}</p>
-                                    <Card><p style={{ fontSize: "40px", color: "#799830" }}>{152}</p></Card>
-                                    <p style={{ fontSize: "30px" }}>{lang === "en" ? "Files" : "ملف"}</p>
+                                    <Card><p style={{ fontSize: "40px", color: "#799830" }}>{this.state.content?this.state.content.length:"Fetching Data"}</p></Card>
+                                    <p style={{ fontSize: "30px" }}>{lang === "en" ? "File(s)" : "ملف"}</p>
                                 </Card>
                             </Grid>
 
@@ -102,7 +106,7 @@ class Main extends Component {
                             <ColumnChart data={[["Sun", 32], ["Mon", 46], ["Tue", 28], ["Wed", 32], ["Thur", 46], ["Fri", 28]]} />
                         </div>
                         <Divider style={{ marginTop: "50px", marginBottom: "50px" }} />
-                        <Grid container justify="space-around" direction="row">
+                        <Grid container justify="space-between" direction="row">
 
                             <Grid item xs>
                                 <div style={{ marginTop: 250, height: "200px", textAlign: 'center' }}>

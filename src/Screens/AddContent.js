@@ -1,10 +1,15 @@
 import React from "react";
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Card, TextField, Button } from "@material-ui/core";
-import { connect } from 'react-redux'
-import NavBar from './NavBar'
-import { Link } from "react-router-dom"
-import Dropzone from 'react-dropzone'
+import { connect } from 'react-redux';
+import NavBar from './NavBar';
+import { Line } from "rc-progress";
+import Axios from "axios";
+
+
+
+
+
 const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
@@ -24,16 +29,40 @@ class AddContent extends React.Component {
     constructor() {
         super()
         this.state = {
-
+            FILE: {},
+            upload: false
         }
-
     }
 
+    submitFile = (e) => {
+        this.setState({ upload: true })
+        e.preventDefault();
+        const f = this.state.FILE
+        const formData = new FormData()
+        formData.append('selectedFile', f);
+        Axios.post("/api/v1/upload", formData)
+            .then((res) => {
+                console.log(res);
+                this.setState({ upload: false })
+            })
+            .catch(err => {
+                console.log(err);
+
+            })
+    }
+
+    onDrop = (e) => {
+        let FILE = e.target.files[0]
+        this.setState({
+            FILE
+        })
+    }
 
 
     render() {
         const { classes, lang } = this.props
-        console.log(this.state.password)
+        const { upload } = this.state
+        console.log(this.state)
         return (
             <div style={{ marginBottom: "325px" }} >
                 <NavBar />
@@ -65,26 +94,27 @@ class AddContent extends React.Component {
                                     </div>
                                 </Grid>
                                 <Grid item >
-                                    <div dir={lang === "en" ? "ltr" : "rtl"}>
+                                    <div dir={lang === "en" ? "ltr" : "rtl"} style={{ textAlign: 'center' }}>
                                         <section>
                                             <div className="dropzone">
-                                                <Dropzone >
-                                                    <p>Drag and Drop files Here</p>
-                                                </Dropzone>
+                                                <input type="file" name="selectedFile" onChange={this.onDrop} />
                                             </div>
-
-                                        </section>                                    </div>
+                                            {upload ? ("Uploading File..." &&
+                                                <Line percent="10" strokeWidth="4" strokeColor="#799830" />) : null}
+                                        </section>
+                                    </div>
                                 </Grid>
                                 <Grid item >
-                                    <Link to="/home">
-                                        <Button variant="contained"
-                                            style={{ backgroundColor: '#799830', color: "white", cursor: 'pointer' }} className={classes.button}>{lang === "en" ? "Add" : "اضافة"}</Button>
-                                    </Link>
+
+                                    <Button variant="contained"
+                                        onClick={this.submitFile}
+                                        style={{ backgroundColor: '#799830', color: "white", cursor: 'pointer' }} className={classes.button}>{lang === "en" ? "Add" : "اضافة"}</Button>
                                 </Grid>
                             </Grid>
                         </Card>
                     </Grid>
                 </Grid>
+
             </div>
         )
     }

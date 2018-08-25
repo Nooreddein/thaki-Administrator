@@ -3,8 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Grid, Card, TextField, Button } from "@material-ui/core";
 import { connect } from 'react-redux'
 import NavBar from './NavBar'
-import { Link } from "react-router-dom"
-import { isLogedIn } from '../actions/index'
+import { isLogedIn, AdminLoggedIn } from '../actions/index'
 import Axios from "../../node_modules/axios";
 
 const styles = theme => ({
@@ -17,7 +16,6 @@ const styles = theme => ({
     textField: {
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
-        width: 200,
     },
 });
 
@@ -26,7 +24,7 @@ class Login extends React.Component {
     constructor() {
         super()
         this.state = {
-            username: "",
+            email: "",
             password: ""
         }
         this.onChange = this.onChange.bind(this);
@@ -37,7 +35,7 @@ class Login extends React.Component {
 
     onChange(e) {
         this.setState({
-            username: e.target.value
+            email: e.target.value
         })
     }
     onChangee(e) {
@@ -48,13 +46,18 @@ class Login extends React.Component {
 
     submitLogin() {
         console.log("LOGIN");
+        const { email, password } = this.state
         Axios.post("/api/v1/login", {
-            username: "noor1",
-            password: 'alo'
+            email,
+            password
         })
             .then((res) => {
                 console.log(res);
+                this.props.AdminLoggedIn(true)
                 this.props.isLogedIn(res.data)
+                console.log(res);
+                
+                window.location.href = "/home"
             })
             .catch((err) => {
                 console.log(err);
@@ -84,8 +87,8 @@ class Login extends React.Component {
                                 <Grid item >
                                     <div dir={lang === "en" ? "ltr" : "rtl"}>
                                         <TextField
-                                            label={lang === "en" ? "User Name" : "اسم المستخدم"}
-                                            placeholder={lang === "en" ? "User Name" : "اسم المستخدم"}
+                                            label={lang === "en" ? "Email" : "البريد الالكتروني"}
+                                            placeholder={lang === "en" ? "Email" : "البريد الالكتروني"}
                                             margin="normal"
                                             className={classes.textField}
                                             onChange={this.onChange}
@@ -107,10 +110,8 @@ class Login extends React.Component {
                                     </div>
                                 </Grid>
                                 <Grid item >
-                                    <Link to="home">
-                                        <Button variant="contained"
-                                            style={{ backgroundColor: '#799830', color: "white", cursor: 'pointer' }} className={classes.button} onClick={this.submitLogin}>{lang === "en" ? "Login" : "تسجيل الدخول"}</Button>
-                                    </Link>
+                                    <Button variant="contained"
+                                        style={{ backgroundColor: '#799830', color: "white", cursor: 'pointer' }} className={classes.button} onClick={this.submitLogin}>{lang === "en" ? "Login" : "تسجيل الدخول"}</Button>
                                 </Grid>
                             </Grid>
                         </Card>
@@ -129,4 +130,4 @@ const mapStateToProps = ({ langReducer }) => {
 
 
 
-export default connect(mapStateToProps, { isLogedIn })(withStyles(styles)(Login))
+export default connect(mapStateToProps, { isLogedIn, AdminLoggedIn })(withStyles(styles)(Login))

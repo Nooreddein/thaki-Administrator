@@ -16,3 +16,11 @@ export const isLogedIn = (data) => {
         payload:data
     }
 }
+
+
+export const AdminLoggedIn = (data)=>{
+    return {
+        type:"ADMIN_LOGED_IN",
+        payload:data
+    }
+}

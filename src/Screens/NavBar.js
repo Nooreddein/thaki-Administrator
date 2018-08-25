@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import { languageChanged } from "../actions"
+import { languageChanged, AdminLoggedIn } from "../actions"
+import { } from '../actions/index'
+
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton';
@@ -37,13 +39,14 @@ class NavBar extends React.Component {
       open: false
     }
   }
+
   toggleDrawer = (side, open) => () => {
     this.setState({
       [side]: open,
     });
   };
   render() {
-    const { classes, lang, languageChanged, home } = this.props;
+    const { classes, lang, languageChanged, home, logedIn, AdminLoggedIn } = this.props;
     const { open } = this.state
     return (
       <div className={classes.root} dir={lang === "en" ? "rtl" : "ltr"}>
@@ -55,14 +58,17 @@ class NavBar extends React.Component {
               onClick={() => languageChanged(lang === "en" ? "ar" : "en")}
             >{lang === "en" ? "عربي" : "English"}</p>
             {
-              home ? <Link to="/"><p
-                style={{ color: "white" }}
-              >{lang === "ar" ? "تسجيل الخروج" : "Logout"}</p></Link> : null
+              home ? <Link to="/"
+
+                onClick={() => AdminLoggedIn(false)}><p
+                  style={{ color: "white" }}
+                >{lang === "ar" ? "تسجيل الخروج" : "Logout"}</p>
+              </Link> : null
             }
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" 
-            onClick={this.toggleDrawer('open', true)}>
+            {logedIn ? <IconButton className={classes.menuButton} color="inherit" aria-label="Menu"
+              onClick={this.toggleDrawer('open', true)}>
               <MenuIcon />
-            </IconButton>
+            </IconButton> : null}
           </Toolbar>
 
         </AppBar>
@@ -83,13 +89,14 @@ NavBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = ({ langReducer }) => {
+const mapStateToProps = ({ langReducer, isLoggedin }) => {
   const { lang } = langReducer
-  return { lang }
+  const { logedIn } = isLoggedin
+  return { lang, logedIn }
 }
 
 
 
 
 
-export default connect(mapStateToProps, { languageChanged })(withStyles(styles)(NavBar));
+export default connect(mapStateToProps, { languageChanged, AdminLoggedIn })(withStyles(styles)(NavBar));
