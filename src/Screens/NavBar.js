@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import { languageChanged, AdminLoggedIn } from "../actions"
+import { languageChanged, AdminLoggedIn, isLogedIn } from "../actions"
 import { } from '../actions/index'
 
 import { connect } from 'react-redux'
@@ -22,10 +22,7 @@ const styles = theme => ({
   flex: {
     flexGrow: 1,
   },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
+
   list: {
     width: 250,
   },
@@ -46,7 +43,9 @@ class NavBar extends React.Component {
     });
   };
   render() {
-    const { classes, lang, languageChanged, home, logedIn, AdminLoggedIn } = this.props;
+    const { classes, lang, languageChanged, home, isLogedIn } = this.props;
+    console.log(this.props);
+
     const { open } = this.state
     return (
       <div className={classes.root} dir={lang === "en" ? "rtl" : "ltr"}>
@@ -60,26 +59,29 @@ class NavBar extends React.Component {
             {
               home ? <Link to="/"
 
-                onClick={() => AdminLoggedIn(false)}><p
+                onClick={() => isLogedIn(false)}><p
                   style={{ color: "white" }}
                 >{lang === "ar" ? "تسجيل الخروج" : "Logout"}</p>
               </Link> : null
             }
-            {logedIn ? <IconButton className={classes.menuButton} color="inherit" aria-label="Menu"
+            {home ? <IconButton style={{
+              marginLeft:lang === "en"? -12:20,
+              marginRight: lang === "en"? 20:-12,
+            }} color="inherit" aria-label="Menu"
               onClick={this.toggleDrawer('open', true)}>
               <MenuIcon />
             </IconButton> : null}
           </Toolbar>
 
         </AppBar>
-        <SwipeableDrawer
-          open={open}
-          onClose={this.toggleDrawer('open', false)}
-          onOpen={this.toggleDrawer('open', true)}
-        >
-          <Drawer />
-        </SwipeableDrawer>
-      </div>
+      <SwipeableDrawer
+        open={open}
+        onClose={this.toggleDrawer('open', false)}
+        onOpen={this.toggleDrawer('open', true)}
+      >
+        <Drawer />
+      </SwipeableDrawer>
+      </div >
     );
   }
 
@@ -89,9 +91,9 @@ NavBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = ({ langReducer, isLoggedin }) => {
+const mapStateToProps = ({ langReducer, Loggedin }) => {
   const { lang } = langReducer
-  const { logedIn } = isLoggedin
+  const { logedIn } = Loggedin
   return { lang, logedIn }
 }
 
@@ -99,4 +101,4 @@ const mapStateToProps = ({ langReducer, isLoggedin }) => {
 
 
 
-export default connect(mapStateToProps, { languageChanged, AdminLoggedIn })(withStyles(styles)(NavBar));
+export default connect(mapStateToProps, { languageChanged, AdminLoggedIn, isLogedIn })(withStyles(styles)(NavBar));

@@ -1,10 +1,14 @@
 import React from "react";
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Card, TextField, Button } from "@material-ui/core";
-import { connect } from 'react-redux'
-import NavBar from './NavBar'
-import { Link } from "react-router-dom"
-import Axios from "../../node_modules/axios";
+import { connect } from 'react-redux';
+import NavBar from './NavBar';
+import { Line } from "rc-progress";
+import Axios from "axios";
+
+
+
+
 
 const styles = theme => ({
     button: {
@@ -21,36 +25,49 @@ const styles = theme => ({
 });
 
 
-class AddAdmin extends React.Component {
+class AddContent extends React.Component {
     constructor() {
         super()
         this.state = {
-            email: "",
-            password: ""
+            FILE: {},
+            upload: false
         }
-
     }
-    AddAdmin = () => {
-        const { emial , password } = this.state
-        Axios.post("/api/v1/addAdmin", {
-            emial,
-            password
-        }).then((res)=>{
-            console.log(res.data);
-        }).catch(err=>{
-            console.log(err);
+
+    submitFile = (e) => {
+        this.setState({ upload: true })
+        e.preventDefault();
+        const f = this.state.FILE
+        const formData = new FormData()
+        formData.append('selectedFile', f);
+        Axios.post("/api/v1/upload", formData)
+            .then((res) => {
+                console.log(res);
+                this.setState({ upload: false })
+            })
+            .catch(err => {
+                console.log(err);
+
+            })
+    }
+
+    onDrop = (e) => {
+        let FILE = e.target.files[0]
+        this.setState({
+            FILE
         })
     }
 
 
     render() {
         const { classes, lang } = this.props
-        console.log(this.state.password)
+        const { upload } = this.state
+        console.log(this.state)
         return (
             <div style={{ marginBottom: "325px" }} >
-                <NavBar />
+                <NavBar home/>
                 <div style={{ textAlign: "center" }}>
-                    <p style={{ fontSize: "80px", color: "#799830" }}>Add Administrator</p>
+                    <p style={{ fontSize: "80px", color: "#799830" }}>Add Content</p>
                 </div>
                 <Grid container justify="space-around" alignItems="center" direction="column">
                     <Grid item xs={6}>
@@ -69,39 +86,35 @@ class AddAdmin extends React.Component {
                                 <Grid item >
                                     <div dir={lang === "en" ? "ltr" : "rtl"}>
                                         <TextField
-                                            label={lang === "en" ? "User Name" : "اسم المستخدم"}
-                                            placeholder={lang === "en" ? "User Name" : "اسم المستخدم"}
+                                            label={lang === "en" ? "Content Name" : "اسم المحتوى"}
+                                            placeholder={lang === "en" ? "Content Name" : "اسم المحتوى"}
                                             margin="normal"
-                                            onChange={(e) => this.setState({ email: e.target.value })}
                                             className={classes.textField}
                                         />
                                     </div>
                                 </Grid>
                                 <Grid item >
-                                    <div dir={lang === "en" ? "ltr" : "rtl"}>
-                                        <TextField
-                                            id="password-input"
-                                            label={lang === "en" ? "Password" : "كلمة المرور"}
-                                            placeholder={lang === "en" ? "Password" : "كلمة المرور"}
-                                            type="password"
-                                            onChange={(e) => this.setState({ password: e.target.value })}
-                                            className={classes.textField}
-                                            autoComplete="current-password"
-                                            margin="normal"
-                                        />
+                                    <div dir={lang === "en" ? "ltr" : "rtl"} style={{ textAlign: 'center' }}>
+                                        <section>
+                                            <div className="dropzone">
+                                                <input type="file" name="selectedFile" onChange={this.onDrop} />
+                                            </div>
+                                            {upload ? ("Uploading File..." &&
+                                                <Line percent="10" strokeWidth="4" strokeColor="#799830" />) : null}
+                                        </section>
                                     </div>
                                 </Grid>
                                 <Grid item >
-                                    <Link to="/home">
-                                        <Button variant="contained"
-                                            onClick={this.AddAdmin}
-                                            style={{ backgroundColor: '#799830', color: "white", cursor: 'pointer' }} className={classes.button}>{lang === "en" ? "Add" : "اضافة"}</Button>
-                                    </Link>
+
+                                    <Button variant="contained"
+                                        onClick={this.submitFile}
+                                        style={{ backgroundColor: '#799830', color: "white", cursor: 'pointer' }} className={classes.button}>{lang === "en" ? "Add" : "اضافة"}</Button>
                                 </Grid>
                             </Grid>
                         </Card>
                     </Grid>
                 </Grid>
+
             </div>
         )
     }
@@ -113,4 +126,4 @@ const mapStateToProps = ({ langReducer }) => {
 }
 
 
-export default connect(mapStateToProps)(withStyles(styles)(AddAdmin))
+export default connect(mapStateToProps)(withStyles(styles)(AddContent))

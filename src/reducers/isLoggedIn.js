@@ -2,13 +2,13 @@ const INIT_STATE = {
     logedIn: false
 }
 
-const isLoggedin = (state = INIT_STATE, action) => {
+const Loggedin = (state = INIT_STATE, action) => {
     switch (action.type) {
-        case "ADMIN_LOGED_IN":
+        case "LOGGED_IN":
             return { ...state, logedIn: action.payload }
         default:
             return state
     }
 }
 
-export default isLoggedin
+export default Loggedin

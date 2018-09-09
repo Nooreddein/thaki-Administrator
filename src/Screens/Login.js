@@ -46,6 +46,7 @@ class Login extends React.Component {
 
     submitLogin() {
         console.log("LOGIN");
+        const that = this
         const { email, password } = this.state
         Axios.post("/api/v1/login", {
             email,
@@ -53,14 +54,12 @@ class Login extends React.Component {
         })
             .then((res) => {
                 console.log(res);
-                this.props.AdminLoggedIn(true)
-                this.props.isLogedIn(res.data)
-                console.log(res);
-                
                 window.location.href = "/home"
+                that.props.isLogedIn(true)
             })
             .catch((err) => {
                 console.log(err);
+                alert("wrong email or password")
             })
     }
 

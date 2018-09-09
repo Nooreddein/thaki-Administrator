@@ -65,7 +65,7 @@ class AddContent extends React.Component {
         console.log(this.state)
         return (
             <div style={{ marginBottom: "325px" }} >
-                <NavBar />
+                <NavBar home/>
                 <div style={{ textAlign: "center" }}>
                     <p style={{ fontSize: "80px", color: "#799830" }}>Add Content</p>
                 </div>

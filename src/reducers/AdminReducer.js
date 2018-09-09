@@ -4,7 +4,7 @@ const INIT_STATE = {
 
 const AdminReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
-        case "LOGGED_IN":
+        case "ADMIN_LOGED_IN":
             return { ...state, data: action.payload }
         default:
             return state
