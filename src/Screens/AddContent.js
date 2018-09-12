@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import NavBar from './NavBar';
 import { Line } from "rc-progress";
 import Axios from "axios";
+import Contents from "../Copmonents/Contents";
 
 
 
@@ -114,7 +115,7 @@ class AddContent extends React.Component {
                         </Card>
                     </Grid>
                 </Grid>
-
+                            <Contents />
             </div>
         )
     }

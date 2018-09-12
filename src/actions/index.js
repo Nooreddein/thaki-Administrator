@@ -1,10 +1,10 @@
 
 
 
-export const languageChanged = (lang) =>{
+export const languageChanged = (lang) => {
     return {
-        type:"LANG_CHANGED",
-        payload:lang
+        type: "LANG_CHANGED",
+        payload: lang
     }
 }
 
@@ -12,15 +12,22 @@ export const languageChanged = (lang) =>{
 
 export const isLogedIn = (data) => {
     return {
-        type:"LOGGED_IN",
-        payload:data
+        type: "LOGGED_IN",
+        payload: data
     }
 }
 
 
-export const AdminLoggedIn = (data)=>{
+export const AdminLoggedIn = (data) => {
     return {
-        type:"ADMIN_LOGED_IN",
-        payload:data
+        type: "ADMIN_LOGED_IN",
+        payload: data
+    }
+}
+
+export const catSelected = (cat) => {
+    return {
+        type: "CAT_SELECTED",
+        payload: cat
     }
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import NavBar from "./NavBar"
 import "chart.js"
 import { PieChart } from "react-chartkick"
-import { Grid, Card, Button, Divider } from '@material-ui/core';
+import { Grid, Card, Button, Divider, CardHeader, Typography } from '@material-ui/core';
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from "react-router-dom"
@@ -29,17 +29,18 @@ class Main extends Component {
         this.state = {
             res: undefined,
             content: undefined,
-            downloads:"Fetching data..."
+            downloads: "Fetching data..."
         }
     }
 
     componentDidMount() {
         Axios.get('/api/v1/get/all/objects').then((res) => {
-            this.setState({ content: res.data.Contents })
+            this.setState({ content: res.data })
         })
-        Axios.get("/api/v1/analytics/downloads").then((res)=>{
-            this.setState({downloads:res.data.Contents.length})
-        })
+            .catch(err => {
+                console.log(err);
+
+            })
     }
 
     render() {
@@ -53,19 +54,17 @@ class Main extends Component {
                     <Grid item>
                         <Grid container direction="row" justify="center">
                             <Grid item >
-                                <Card style={{ padding: 70, textAlign: 'center', margin: "30px" }}>
-                                    <Link to="/add-content"><Button variant="contained"
-                                        style={{ backgroundColor: '#799830', color: "white", cursor: 'pointer' }}
-                                        className={classes.button}>
-                                        {lang === "en" ? "Add Content" : "اضافة ملف"}</Button></Link>
+                                <Card style={{ padding: 70, textAlign: 'center', margin: "30px", minWidth: "372.50px" }}>
                                     <p style={{ fontSize: "30px" }}>{lang === "en" ? "We Currently Have" : "لدينا حاليا"}</p>
-                                    <Card><p style={{ fontSize: "40px", color: "#799830" }}>{this.state.downloads}</p></Card>
+                                    <Card><p style={{ fontSize: "40px", color: "#799830" }}>{this.state.content ? this.state.content.length : "Fetching Data..."}</p></Card>
                                     <p style={{ fontSize: "30px" }}>{lang === "en" ? "Downloads" : "تحميلات"}</p>
                                 </Card>
 
                             </Grid>
                             <Grid item >
-                                <Card style={{ padding: 70, textAlign: 'center', margin: "30px" }}>
+                                <Card style={{ padding: 70, textAlign: 'center', margin: "30px", minWidth: "372.50px" }}>
+                                    <p style={{ fontSize: "50px", }}>Manage Content</p>
+
                                     <Link to="/add-content"><Button variant="contained"
                                         style={{ backgroundColor: '#799830', color: "white", cursor: 'pointer' }}
                                         className={classes.button} >
@@ -90,7 +89,6 @@ class Main extends Component {
                                         {lang === "en" ? "Downloads Analytics" : "احصاىيات التحميل"}</p>
                                     <PieChart data={[
                                         [lang === "en" ? "Successful Downloads" : "التحميلات الناجحة", 44],
-                                        [lang === "en" ? "Paused Downloads" : "التحميلات الموقفة", 23],
                                         [lang === "en" ? "Failed Downloads" : "التحميلات الفاشلة", 12]
                                     ]} />
                                 </div>

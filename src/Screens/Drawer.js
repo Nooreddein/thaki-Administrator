@@ -47,6 +47,19 @@ class Drawer extends React.Component {
 
                             </Card>
                         </Link>
+
+                        <Link to="/cat">
+                            <Card style={{ backgroundColor: "#799830", margin: "10px" }}>
+
+                                <p style={{
+                                    fontSize: "15px",
+                                    color: "white"
+                                }}>
+                                    Categories
+                                </p>
+
+                            </Card>
+                        </Link>
                     </Grid>
                 </Grid>
             </div>
