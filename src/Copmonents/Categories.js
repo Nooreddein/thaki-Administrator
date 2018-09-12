@@ -21,8 +21,17 @@ export default class Categories extends Component {
                 console.log(err);
             })
     }
-    delete(cat) {
-        Axios.delete('/api/v1/delete/cat', { cat })
+    delete(name) {
+        console.log(name);
+
+        Axios.post('/api/v1/delete/cat', { cat: name })
+            .then(res => {
+                console.log(res);
+                window.location.reload()
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
     openOrClose = () => {
         this.setState({ in: !this.state.in })
@@ -32,19 +41,19 @@ export default class Categories extends Component {
 
     }
     confirm = (name, newName) => {
-        const {data} = this.state
-            for(let i =0;i<data.length;i++){
-                if(data[i].Name === name){
-                    data[i].Name = newName;
-                    break;
-                }
+        const { data } = this.state
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].Name === name) {
+                data[i].Name = newName;
+                break;
             }
-            this.setState({newName:''})
+        }
+        this.setState({ newName: '' })
     }
     render() {
         const { data } = this.state
         return (
-            <Grid container  style={{ width: "auto" }}>
+            <Grid container style={{ width: "auto" }}>
                 {
                     data.map((elem) => {
                         if (!elem.Name.includes("bean"))

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Divider, Grid, Card } from '../../node_modules/@material-ui/core';
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 class Drawer extends React.Component {
     state = {
@@ -8,6 +9,7 @@ class Drawer extends React.Component {
 
     };
     render() {
+        const {lang} = this.props
         return (
             <div>
                 <Link to="home">
@@ -35,14 +37,28 @@ class Drawer extends React.Component {
                 <p style={{ fontSize: "15px", color: "#799830", margin: "20px" }}>Manage The App From The Online DashBoard</p>
                 <Grid container direction="column" style={{ textAlign: "center" }}>
                     <Grid item xs>
-                        <Link to="add-content">
+                        <Link to="/home">
                             <Card style={{ backgroundColor: "#799830", margin: "10px" }}>
 
                                 <p style={{
                                     fontSize: "15px",
                                     color: "white"
                                 }}>
-                                    Add Content
+                                    DashBoard
+                                </p>
+
+                            </Card>
+                        </Link>
+
+
+                        <Link to="/add-content">
+                            <Card style={{ backgroundColor: "#799830", margin: "10px" }}>
+
+                                <p style={{
+                                    fontSize: "15px",
+                                    color: "white"
+                                }}>
+                                    Manage Contents
                                 </p>
 
                             </Card>
@@ -55,18 +71,39 @@ class Drawer extends React.Component {
                                     fontSize: "15px",
                                     color: "white"
                                 }}>
-                                    Categories
+                                    Manage Categories
+                                </p>
+
+                            </Card>
+                        </Link>
+                        <Link to="/analytical">
+                            <Card style={{ backgroundColor: "#799830", margin: "10px" }}>
+
+                                <p style={{
+                                    fontSize: "15px",
+                                    color: "white"
+                                }}>
+                                    Analytical
                                 </p>
 
                             </Card>
                         </Link>
                     </Grid>
                 </Grid>
+
+
+                <Link to="/" style={{textAlign:"center", }}><p
+                    style={{ color: "#799830",marginTop:"400px"}}
+                >{lang === "ar" ? "تسجيل الخروج" : "Logout"}</p>
+                </Link>
             </div>
         );
     }
 }
 
+const mapStateToProps = ({langReducer}) =>{
+    const {lang} = langReducer
+    return {lang}
+}
 
-
-export default Drawer;
+export default connect(mapStateToProps)(Drawer);
